@@ -15,6 +15,11 @@ const MAPS_URL =
  * ------------------------------------------------------------------ */
 const photos = {
   hero: { src: "/photos/hero-booth.jpg", alt: "Car masked up inside a lit spray booth" },
+  damage: { src: "/photos/damaged-repair.jpg", alt: "Accident-damaged car stripped down in the repair bay" },
+  prep: { src: "/photos/paint-prep.jpg", alt: "Panel masked and taped ready for colour" },
+  sanding: { src: "/photos/panel-sand.jpg", alt: "Rear quarter panel being sanded back" },
+  detail: { src: "/photos/panel-detail.jpg", alt: "Bumper masked up in the booth" },
+  workshop: { src: "/photos/workshop-wide.jpg", alt: "The workshop floor" },
   mechanical: { src: "/photos/mechanical.jpg", alt: "Mechanical work under the bonnet" },
 };
 
@@ -56,25 +61,34 @@ const icons: Record<IconName, React.ReactElement> = {
   ),
 };
 
-const services: { title: string; body: string; icon: IconName }[] = [
+const services: {
+  title: string;
+  body: string;
+  icon: IconName;
+  photo: { src: string; alt: string };
+}[] = [
   {
     title: "Smash repairs",
     icon: "panel",
+    photo: photos.damage,
     body: "Panel beating and structural repair for everything from car-park scrapes to serious hits. Quoted up front, through your insurer or privately.",
   },
   {
     title: "Spray painting & colour matching",
     icon: "spray",
+    photo: photos.prep,
     body: "Factory-matched colour, sprayed and blended so the repair disappears into the panel next to it.",
   },
   {
     title: "Mechanical repairs & servicing",
     icon: "spanner",
+    photo: photos.mechanical,
     body: "Accident-related mechanical work and regular servicing — brakes, cooling, suspension — handled in the same workshop, same visit.",
   },
   {
     title: "Full restoration",
     icon: "restore",
+    photo: photos.detail,
     body: "For the keeper in the garage: metalwork, paint and mechanicals brought back properly, not quickly.",
   },
 ];
@@ -394,15 +408,23 @@ export default function Home() {
 
           <div className="mt-12 grid gap-px overflow-hidden border border-steel/30 bg-steel/30 sm:grid-cols-2">
             {services.map((service) => (
-              <article
-                key={service.title}
-                className="group bg-white p-7 transition-colors hover:bg-primer/60 lg:p-9"
-              >
-                <span className="inline-flex h-12 w-12 items-center justify-center bg-coveralls text-hivis transition-colors group-hover:bg-coveralls-deep">
-                  <Icon name={service.icon} />
-                </span>
-                <h3 className="display mt-5 text-2xl text-coveralls">{service.title}</h3>
-                <p className="mt-3 leading-relaxed text-ink/75">{service.body}</p>
+              <article key={service.title} className="group bg-white">
+                <div className="relative aspect-[16/9] overflow-hidden bg-primer">
+                  <Image
+                    src={service.photo.src}
+                    alt={service.photo.alt}
+                    fill
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                  />
+                  <span className="absolute bottom-0 left-0 inline-flex h-12 w-12 items-center justify-center bg-coveralls text-hivis">
+                    <Icon name={service.icon} />
+                  </span>
+                </div>
+                <div className="p-7 lg:p-8">
+                  <h3 className="display text-2xl text-coveralls">{service.title}</h3>
+                  <p className="mt-3 leading-relaxed text-ink/75">{service.body}</p>
+                </div>
               </article>
             ))}
           </div>
@@ -435,8 +457,8 @@ export default function Home() {
             </div>
             <div className="relative min-h-[16rem] md:min-h-full">
               <Image
-                src={photos.mechanical.src}
-                alt={photos.mechanical.alt}
+                src={photos.workshop.src}
+                alt={photos.workshop.alt}
                 fill
                 sizes="(max-width: 768px) 100vw, 40vw"
                 className="object-cover"
@@ -516,45 +538,73 @@ export default function Home() {
       {/* ---------------------------------------------------------- Reviews */}
       <section id="reviews" className="grain relative scroll-mt-20 overflow-hidden bg-coveralls text-paper">
         <div className="relative mx-auto max-w-6xl px-5 py-20 lg:py-24">
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] lg:gap-20">
-            <div>
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,21rem)] lg:gap-16">
+            <div className="flex flex-col">
               <p className="eyebrow text-hivis">From the street</p>
               <h2 className="display mt-3 text-[clamp(2.25rem,4.4vw,3.25rem)]">
                 What people say
               </h2>
-              <div className="mt-7 flex items-center gap-4">
+
+              <div className="mt-7 flex items-center gap-5">
                 <span className="display text-[3.5rem] leading-none text-hivis">4.8</span>
                 <span className="h-10 w-px bg-white/15" aria-hidden="true" />
                 <div>
                   <Stars className="text-base" />
                   <p className="mt-1.5 text-sm text-steel">14 Google reviews</p>
                 </div>
+                <a
+                  href={MAPS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ml-auto hidden font-mono text-xs uppercase tracking-[0.14em] text-steel underline decoration-steel/40 underline-offset-4 transition-colors hover:text-paper sm:inline-block"
+                >
+                  Read them on Google
+                </a>
               </div>
+
+              <ul className="mt-10 flex flex-1 flex-col justify-between gap-7">
+                {reviews.map((review) => (
+                  <li key={review.quote} className="border-t border-white/20 pt-5">
+                    <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                      <Stars className="text-[13px]" />
+                      <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-steel">
+                        {review.meta}
+                      </span>
+                    </div>
+                    <blockquote className="mt-3 text-[1.375rem] font-medium leading-[1.35] text-paper">
+                      &ldquo;{review.quote}&rdquo;
+                    </blockquote>
+                  </li>
+                ))}
+              </ul>
+
               <a
                 href={MAPS_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-6 inline-block font-mono text-xs uppercase tracking-[0.14em] text-steel underline decoration-steel/40 underline-offset-4 transition-colors hover:text-paper"
+                className="mt-8 inline-block font-mono text-xs uppercase tracking-[0.14em] text-steel underline decoration-steel/40 underline-offset-4 transition-colors hover:text-paper sm:hidden"
               >
                 Read them on Google
               </a>
             </div>
 
-            {/* Rule-topped quotes rather than cards — three short reviews in
-                equal-height boxes leave a hole where the text should be. */}
-            <ul className="grid gap-x-10 gap-y-9 sm:grid-cols-3">
-              {reviews.map((review) => (
-                <li key={review.quote} className="border-t border-white/20 pt-5">
-                  <Stars className="text-[13px]" />
-                  <blockquote className="mt-3 text-[1.25rem] font-medium leading-[1.35] text-paper">
-                    &ldquo;{review.quote}&rdquo;
-                  </blockquote>
-                  <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-steel">
-                    {review.meta}
-                  </p>
-                </li>
-              ))}
-            </ul>
+            <div className="relative min-h-[20rem] lg:min-h-full">
+              <div
+                aria-hidden="true"
+                className="absolute -bottom-3 -left-3 hidden h-20 w-20 border-b-2 border-l-2 border-hivis lg:block"
+              />
+              <Image
+                src={photos.sanding.src}
+                alt={photos.sanding.alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 21rem"
+                className="object-cover"
+              />
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-gradient-to-t from-coveralls/70 via-coveralls/10 to-transparent"
+              />
+            </div>
           </div>
         </div>
       </section>
