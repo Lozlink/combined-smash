@@ -1,26 +1,179 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  /* Surface + brand */
+  --color-coveralls: #14293c;
+  --color-coveralls-deep: #0d1c29;
+  --color-carbon: #071320;
+  --color-primer: #e8ebed;
+  --color-paper: #f7f8f7;
+  --color-hivis: #ffad0a;
+  --color-hivis-bright: #ffc340;
+  --color-steel: #8fa1ae;
+  --color-steel-light: #b6c3cc;
+  --color-ink: #0e1f2d;
+
+  --font-sans: var(--font-barlow);
+  --font-display: var(--font-big-shoulders);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-barlow), "Barlow", "Helvetica Neue", Arial, sans-serif;
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-hivis);
+  color: var(--color-coveralls-deep);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-hivis);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ---------------------------------------------------------------- *
+ * Display type: Big Shoulders is a condensed grotesque — it needs a
+ * touch of negative tracking at large sizes or the counters float.
+ * ---------------------------------------------------------------- */
+.display {
+  font-family: var(--font-big-shoulders), "Barlow Condensed", Impact, sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+  line-height: 0.92;
+}
+
+.eyebrow {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+/* Workshop texture: fine noise over flat brand colour so the big dark
+   panels read as painted steel rather than a flat CSS fill. */
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Hazard tape — the one piece of workshop iconography worth keeping. */
+.hazard {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--color-hivis) 0 10px,
+    transparent 10px 20px
+  );
+}
+
+.hazard-fine {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--color-hivis) 0 4px,
+    var(--color-coveralls-deep) 4px 8px
+  );
+}
+
+.rule-hivis {
+  height: 3px;
+  width: 3.5rem;
+  background: var(--color-hivis);
+}
+
+/* Cards lift on hover; the hairline goes to brand navy. */
+.card {
+  position: relative;
+  background: #fff;
+  border: 1px solid rgb(143 161 174 / 0.35);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-coveralls);
+  box-shadow: 0 18px 34px -22px rgb(14 31 45 / 0.55);
+}
+
+.field {
+  width: 100%;
+  border: 1px solid rgb(143 161 174 / 0.55);
+  background: #fff;
+  padding: 0.75rem 0.875rem;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--color-ink);
+  border-radius: 2px;
+  transition:
+    border-color 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+.field::placeholder {
+  color: rgb(143 161 174 / 0.9);
+}
+
+.field:hover {
+  border-color: rgb(20 41 60 / 0.55);
+}
+
+.field:focus {
+  outline: none;
+  border-color: var(--color-coveralls);
+  box-shadow: 0 0 0 3px rgb(255 173 10 / 0.28);
+}
+
+.field[aria-invalid="true"] {
+  border-color: #b3400e;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.rise {
+  animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.rise-1 { animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both; }
+.rise-2 { animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both; }
+.rise-3 { animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.24s both; }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
