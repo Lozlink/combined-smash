@@ -1,4 +1,7 @@
 import Image from "next/image";
+import { getDictionary } from "@/lib/i18n";
+import { getLang } from "@/lib/lang";
+import { LanguageToggle } from "./language-toggle";
 import { QuoteForm } from "./quote-form";
 
 const PHONE_DISPLAY = "(02) 9799 9433";
@@ -12,23 +15,25 @@ const MAPS_URL =
  * PLACEHOLDER PHOTOGRAPHY — everything under /public/photos is stock.
  * Swap each file for a real shot of the Five Dock workshop, keeping
  * the same filename and roughly the same aspect ratio.
+ * Alt text lives in lib/i18n.ts under `photos`, keyed by these names.
  * ------------------------------------------------------------------ */
 const photos = {
-  hero: { src: "/photos/hero-booth.jpg", alt: "Car masked up inside a lit spray booth" },
-  damage: { src: "/photos/damaged-repair.jpg", alt: "Accident-damaged car stripped down in the repair bay" },
-  prep: { src: "/photos/paint-prep.jpg", alt: "Panel masked and taped ready for colour" },
-  sanding: { src: "/photos/panel-sand.jpg", alt: "Rear quarter panel being sanded back" },
-  detail: { src: "/photos/panel-detail.jpg", alt: "Bumper masked up in the booth" },
-  workshop: { src: "/photos/workshop-wide.jpg", alt: "The workshop floor" },
-  mechanical: { src: "/photos/mechanical.jpg", alt: "Mechanical work under the bonnet" },
-};
+  hero: "/photos/hero-booth.jpg",
+  damage: "/photos/damaged-repair.jpg",
+  prep: "/photos/paint-prep.jpg",
+  sanding: "/photos/panel-sand.jpg",
+  detail: "/photos/panel-detail.jpg",
+  workshop: "/photos/workshop-wide.jpg",
+  mechanical: "/photos/mechanical.jpg",
+} as const;
 
-/* The paint build-up, as a legend rather than decoration. */
+/* The paint build-up, as a legend rather than decoration.
+   Labels come from the dictionary, in this order. */
 const paintStages = [
-  { label: "Strip", color: "#6d7982" },
-  { label: "Primer", color: "#a7b1b8" },
-  { label: "Colour", color: "#2c4c6c" },
-  { label: "Clear", color: "#14293c", gloss: true },
+  { color: "#6d7982" },
+  { color: "#a7b1b8" },
+  { color: "#2c4c6c" },
+  { color: "#14293c", gloss: true },
 ];
 
 type IconName = "panel" | "spray" | "spanner" | "restore";
@@ -61,85 +66,13 @@ const icons: Record<IconName, React.ReactElement> = {
   ),
 };
 
-const services: {
-  title: string;
-  body: string;
-  icon: IconName;
-  photo: { src: string; alt: string };
-}[] = [
-  {
-    title: "Smash repairs",
-    icon: "panel",
-    photo: photos.damage,
-    body: "Panel beating and structural repair for everything from car-park scrapes to serious hits. Quoted up front, through your insurer or privately.",
-  },
-  {
-    title: "Spray painting & colour matching",
-    icon: "spray",
-    photo: photos.prep,
-    body: "Factory-matched colour, sprayed and blended so the repair disappears into the panel next to it.",
-  },
-  {
-    title: "Mechanical repairs & servicing",
-    icon: "spanner",
-    photo: photos.mechanical,
-    body: "Accident-related mechanical work and regular servicing — brakes, cooling, suspension — handled in the same workshop, same visit.",
-  },
-  {
-    title: "Full restoration",
-    icon: "restore",
-    photo: photos.detail,
-    body: "For the keeper in the garage: metalwork, paint and mechanicals brought back properly, not quickly.",
-  },
-];
-
-const assurances = [
-  "All insurers welcome",
-  "Free written quotes",
-  "Colour-matched paint",
-  "Most jobs back in a week",
-];
-
-const processSteps = [
-  { title: "Quote", body: "Drive in for a look and a written quote — usually while you wait." },
-  { title: "Approval", body: "Going through insurance? We submit the quote and deal with the assessor." },
-  { title: "Panel & paint", body: "Panels repaired or replaced, then colour-matched and sprayed." },
-  { title: "Safety check", body: "Anything the impact reached — steering, lights, cooling — checked and fixed." },
-  { title: "Pickup", body: "Washed and ready. Most jobs are back on the road within the week." },
-];
-
-/* Answers need confirming with the workshop before this ships. */
-const faqs = [
-  {
-    q: "Can I choose my own repairer?",
-    a: "In NSW most policies let you nominate your own repairer rather than take the insurer's. Check your PDS, or bring it in and we'll go through it with you.",
-  },
-  {
-    q: "Do I need three quotes?",
-    a: "A few insurers still ask for more than one; most don't. Ours is free and written either way.",
-  },
-  {
-    q: "How long will it take?",
-    a: "Most jobs are back on the road within the week. Structural work depends on how fast the parts land.",
-  },
-  {
-    q: "Will the paint match?",
-    a: "Colour is mixed to the vehicle's paint code and blended into the panels either side, so the repair doesn't sit next to a slightly different shade.",
-  },
-  {
-    q: "Can you do the mechanical work too?",
-    a: "Yes — panel, paint and mechanical are all in the one workshop, so the car doesn't get sent somewhere else halfway through.",
-  },
-  {
-    q: "What should I bring?",
-    a: "The car, your licence, and the insurer and claim number if you've already lodged one.",
-  },
-];
-
-const reviews = [
-  { quote: "Super friendly staff.", meta: "Google review" },
-  { quote: "Our car got fixed in a week, very impressed with the quality of the work!", meta: "Google review" },
-  { quote: "A good place to service your car.", meta: "Google review" },
+/* Icon + photo for each service, in the same order as the dictionary's
+   `services.items`. Copy is language-dependent; art direction isn't. */
+const serviceArt: { icon: IconName; photo: keyof typeof photos }[] = [
+  { icon: "panel", photo: "damage" },
+  { icon: "spray", photo: "prep" },
+  { icon: "spanner", photo: "mechanical" },
+  { icon: "restore", photo: "detail" },
 ];
 
 const serviceAreas = [
@@ -219,7 +152,17 @@ function PhoneIcon() {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const lang = await getLang();
+  const t = getDictionary(lang);
+
+  const navLinks: [string, string][] = [
+    [t.header.nav.services, "#services"],
+    [t.header.nav.process, "#process"],
+    [t.header.nav.reviews, "#reviews"],
+    [t.header.nav.findUs, "#quote"],
+  ];
+
   return (
     <main className="flex-1 pb-16 lg:pb-0">
       <script
@@ -229,26 +172,21 @@ export default function Home() {
 
       {/* ---------------------------------------------------------- Header */}
       <header className="sticky top-0 z-50 border-b border-white/10 bg-coveralls-deep/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center gap-6 px-5 py-3">
+        <div className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-3 sm:gap-6">
           <a href="#top" className="flex items-center gap-2.5">
             <span className="hazard-fine block h-9 w-[5px] rounded-[1px]" aria-hidden="true" />
             <span className="flex flex-col leading-none">
               <span className="display text-[1.15rem] text-paper sm:text-xl">
-                Combined Smash Repairs
+                {t.header.brand}
               </span>
               <span className="mt-[3px] hidden text-[11px] tracking-[0.32em] text-steel sm:block">
-                联合车厂 · FIVE DOCK
+                {t.header.brandSub}
               </span>
             </span>
           </a>
 
-          <nav className="ml-auto hidden items-center gap-7 lg:flex" aria-label="Primary">
-            {[
-              ["Services", "#services"],
-              ["Process", "#process"],
-              ["Reviews", "#reviews"],
-              ["Find us", "#quote"],
-            ].map(([label, href]) => (
+          <nav className="ml-auto hidden items-center gap-7 lg:flex" aria-label={t.header.navLabel}>
+            {navLinks.map(([label, href]) => (
               <a
                 key={href}
                 href={href}
@@ -259,13 +197,15 @@ export default function Home() {
             ))}
           </nav>
 
+          <LanguageToggle lang={lang} label={t.header.languageLabel} className="ml-auto lg:ml-0" />
+
           <a
             href={PHONE_TEL}
-            className="ml-auto inline-flex items-center gap-2 rounded-sm bg-hivis px-4 py-2 font-mono text-[13px] font-bold tracking-tight text-coveralls-deep transition-colors hover:bg-hivis-bright lg:ml-0"
+            className="inline-flex items-center gap-2 rounded-sm bg-hivis px-4 py-2 font-mono text-[13px] font-bold tracking-tight text-coveralls-deep transition-colors hover:bg-hivis-bright"
           >
             <PhoneIcon />
             <span className="hidden sm:inline">{PHONE_DISPLAY}</span>
-            <span className="sm:hidden">Call</span>
+            <span className="sm:hidden">{t.header.call}</span>
           </a>
         </div>
       </header>
@@ -285,19 +225,18 @@ export default function Home() {
           <div>
             <p className="rise eyebrow flex items-center gap-2.5 text-steel">
               <span className="inline-block h-[3px] w-8 bg-hivis" aria-hidden="true" />
-              Smash · Paint · Mechanical — Parramatta Rd
+              {t.hero.eyebrow}
             </p>
 
             <h1 className="rise-1 display mt-6 text-[clamp(3rem,7.5vw,5.75rem)] text-paper">
-              We put cars
+              {t.hero.titleLine1}
               <br />
-              back together<span className="text-hivis">.</span>
+              {t.hero.titleLine2}
+              <span className="text-hivis">{t.hero.titleMark}</span>
             </h1>
 
             <p className="rise-2 mt-7 max-w-xl text-[1.0625rem] leading-relaxed text-paper/80 sm:text-lg">
-              Panel beating, colour-matched spray painting and mechanical repairs under one
-              roof in Five Dock. Insurance claims handled start to finish — over 25 years
-              of them.
+              {t.hero.lede}
             </p>
 
             <div className="rise-2 mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
@@ -306,13 +245,13 @@ export default function Home() {
                 className="inline-flex items-center justify-center gap-2.5 rounded-sm bg-hivis px-7 py-4 font-mono text-sm font-bold uppercase tracking-[0.1em] text-coveralls-deep transition-colors hover:bg-hivis-bright"
               >
                 <PhoneIcon />
-                Call {PHONE_DISPLAY}
+                {t.hero.call} {PHONE_DISPLAY}
               </a>
               <a
                 href="#quote"
                 className="inline-flex items-center justify-center rounded-sm border border-steel/50 px-7 py-4 font-mono text-sm font-bold uppercase tracking-[0.1em] text-paper transition-colors hover:border-paper hover:bg-white/5"
               >
-                Request a quote
+                {t.hero.quote}
               </a>
             </div>
 
@@ -320,12 +259,12 @@ export default function Home() {
               <span className="flex items-center gap-2 text-paper">
                 <Stars className="text-[15px]" />
                 <span className="font-semibold">4.8</span>
-                <span className="text-steel">on Google</span>
+                <span className="text-steel">{t.hero.onGoogle}</span>
               </span>
               <span aria-hidden="true" className="hidden h-4 w-px bg-white/15 sm:block" />
-              <span className="text-steel-light">25+ years in the trade</span>
+              <span className="text-steel-light">{t.hero.years}</span>
               <span aria-hidden="true" className="hidden h-4 w-px bg-white/15 sm:block" />
-              <span className="text-steel-light">Insurance &amp; private work</span>
+              <span className="text-steel-light">{t.hero.work}</span>
             </div>
           </div>
 
@@ -342,8 +281,8 @@ export default function Home() {
             <figure className="relative">
               <div className="relative aspect-[4/5] overflow-hidden bg-coveralls">
                 <Image
-                  src={photos.hero.src}
-                  alt={photos.hero.alt}
+                  src={photos.hero}
+                  alt={t.photos.hero}
                   fill
                   priority
                   sizes="(max-width: 1024px) 100vw, 26rem"
@@ -354,14 +293,14 @@ export default function Home() {
                   className="absolute inset-0 bg-gradient-to-t from-coveralls-deep/80 via-transparent to-transparent"
                 />
                 <figcaption className="absolute bottom-0 left-0 right-0 p-5">
-                  <p className="eyebrow text-hivis">In the booth</p>
-                  <p className="display mt-1.5 text-2xl text-paper">Colour matched, not close enough</p>
+                  <p className="eyebrow text-hivis">{t.hero.photoEyebrow}</p>
+                  <p className="display mt-1.5 text-2xl text-paper">{t.hero.photoCaption}</p>
                 </figcaption>
               </div>
 
               <div className="mt-4 flex gap-1.5" aria-hidden="true">
-                {paintStages.map((stage) => (
-                  <div key={stage.label} className="flex-1">
+                {paintStages.map((stage, i) => (
+                  <div key={stage.color} className="flex-1">
                     <div
                       className="h-2.5"
                       style={{
@@ -371,7 +310,7 @@ export default function Home() {
                       }}
                     />
                     <span className="mt-2 block font-mono text-[10px] uppercase tracking-[0.16em] text-steel">
-                      {stage.label}
+                      {t.hero.paintStages[i]}
                     </span>
                   </div>
                 ))}
@@ -384,7 +323,7 @@ export default function Home() {
       {/* ------------------------------------------------------- Assurances */}
       <section className="border-y border-coveralls/10 bg-primer">
         <ul className="mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-4 px-5 py-6 lg:grid-cols-4">
-          {assurances.map((item) => (
+          {t.assurances.map((item) => (
             <li key={item} className="flex items-center gap-2.5 text-sm font-medium text-coveralls">
               <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.2" className="h-4 w-4 shrink-0 text-hivis" aria-hidden="true">
                 <path d="m4 10.5 4 4 8-9" />
@@ -399,66 +338,68 @@ export default function Home() {
       <section id="services" className="scroll-mt-20 bg-paper">
         <div className="mx-auto max-w-6xl px-5 py-20 lg:py-24">
           <div className="max-w-2xl">
-            <p className="eyebrow text-coveralls/50">What we do</p>
+            <p className="eyebrow text-coveralls/50">{t.services.eyebrow}</p>
             <h2 className="display mt-3 text-[clamp(2.25rem,5vw,3.5rem)] text-coveralls">
-              One workshop, the whole repair
+              {t.services.title}
             </h2>
             <div className="rule-hivis mt-6" />
           </div>
 
           <div className="mt-12 grid gap-px overflow-hidden border border-steel/30 bg-steel/30 sm:grid-cols-2">
-            {services.map((service) => (
-              <article key={service.title} className="group bg-white">
-                <div className="relative aspect-[16/9] overflow-hidden bg-primer">
-                  <Image
-                    src={service.photo.src}
-                    alt={service.photo.alt}
-                    fill
-                    sizes="(max-width: 640px) 100vw, 50vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                  />
-                  <span className="absolute bottom-0 left-0 inline-flex h-12 w-12 items-center justify-center bg-coveralls text-hivis">
-                    <Icon name={service.icon} />
-                  </span>
-                </div>
-                <div className="p-7 lg:p-8">
-                  <h3 className="display text-2xl text-coveralls">{service.title}</h3>
-                  <p className="mt-3 leading-relaxed text-ink/75">{service.body}</p>
-                </div>
-              </article>
-            ))}
+            {t.services.items.map((service, i) => {
+              const art = serviceArt[i];
+              return (
+                <article key={service.title} className="group bg-white">
+                  <div className="relative aspect-[16/9] overflow-hidden bg-primer">
+                    <Image
+                      src={photos[art.photo]}
+                      alt={t.photos[art.photo]}
+                      fill
+                      sizes="(max-width: 640px) 100vw, 50vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                    />
+                    <span className="absolute bottom-0 left-0 inline-flex h-12 w-12 items-center justify-center bg-coveralls text-hivis">
+                      <Icon name={art.icon} />
+                    </span>
+                  </div>
+                  <div className="p-7 lg:p-8">
+                    <h3 className="display text-2xl text-coveralls">{service.title}</h3>
+                    <p className="mt-3 leading-relaxed text-ink/75">{service.body}</p>
+                  </div>
+                </article>
+              );
+            })}
           </div>
 
           {/* Claim panel */}
           <div className="mt-10 grid overflow-hidden bg-coveralls md:grid-cols-[1.15fr_1fr]">
             <div className="grain relative flex flex-col justify-center p-8 lg:p-12">
-              <p className="eyebrow relative text-hivis">Insurance claims</p>
+              <p className="eyebrow relative text-hivis">{t.services.claim.eyebrow}</p>
               <h3 className="display relative mt-3 text-[clamp(1.75rem,3.2vw,2.5rem)] text-paper">
-                Not sure where to start with a claim?
+                {t.services.claim.title}
               </h3>
               <p className="relative mt-4 max-w-md leading-relaxed text-paper/75">
-                Bring the car in. We photograph the damage, write the quote and deal with the
-                insurer and their assessor — you deal with us.
+                {t.services.claim.body}
               </p>
               <div className="relative mt-7 flex flex-wrap gap-3">
                 <a
                   href="#quote"
                   className="rounded-sm bg-hivis px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.14em] text-coveralls-deep transition-colors hover:bg-hivis-bright"
                 >
-                  Get a quote
+                  {t.services.claim.quote}
                 </a>
                 <a
                   href={PHONE_TEL}
                   className="rounded-sm border border-steel/50 px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.14em] text-paper transition-colors hover:border-paper"
                 >
-                  Talk to us
+                  {t.services.claim.talk}
                 </a>
               </div>
             </div>
             <div className="relative min-h-[16rem] md:min-h-full">
               <Image
-                src={photos.workshop.src}
-                alt={photos.workshop.alt}
+                src={photos.workshop}
+                alt={t.photos.workshop}
                 fill
                 sizes="(max-width: 768px) 100vw, 40vw"
                 className="object-cover"
@@ -474,19 +415,16 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-5 py-20 lg:py-24">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-xl">
-              <p className="eyebrow text-coveralls/50">Start to finish</p>
+              <p className="eyebrow text-coveralls/50">{t.process.eyebrow}</p>
               <h2 className="display mt-3 text-[clamp(2.25rem,5vw,3.5rem)] text-coveralls">
-                How a repair runs
+                {t.process.title}
               </h2>
             </div>
-            <p className="max-w-sm text-sm leading-relaxed text-ink/65">
-              Same five steps whether you&rsquo;re claiming or paying privately. You&rsquo;ll know
-              the price before anything is touched.
-            </p>
+            <p className="max-w-sm text-sm leading-relaxed text-ink/65">{t.process.aside}</p>
           </div>
 
           <ol className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-5 lg:gap-6">
-            {processSteps.map((step, i) => (
+            {t.process.steps.map((step, i) => (
               <li key={step.title} className="relative">
                 <div className="flex items-center gap-3">
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-coveralls font-mono text-xs font-bold text-hivis">
@@ -507,13 +445,11 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-5 py-20 lg:py-24">
           <div className="grid gap-12 lg:grid-cols-[minmax(0,19rem)_minmax(0,1fr)] lg:gap-20">
             <div>
-              <p className="eyebrow text-coveralls/50">Before you come in</p>
+              <p className="eyebrow text-coveralls/50">{t.faq.eyebrow}</p>
               <h2 className="display mt-3 text-[clamp(2.25rem,4.4vw,3.25rem)] text-coveralls">
-                Questions we get asked
+                {t.faq.title}
               </h2>
-              <p className="mt-5 text-ink/70">
-                Anything else, ring the workshop — it&rsquo;s quicker than typing it out.
-              </p>
+              <p className="mt-5 text-ink/70">{t.faq.aside}</p>
               <a
                 href={PHONE_TEL}
                 className="mt-5 inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.14em] text-coveralls underline decoration-hivis decoration-2 underline-offset-4"
@@ -524,7 +460,7 @@ export default function Home() {
             </div>
 
             <dl className="grid gap-x-12 gap-y-8 sm:grid-cols-2">
-              {faqs.map((faq) => (
+              {t.faq.items.map((faq) => (
                 <div key={faq.q} className="border-t border-coveralls/15 pt-5">
                   <dt className="display text-xl text-coveralls">{faq.q}</dt>
                   <dd className="mt-2.5 leading-relaxed text-ink/75">{faq.a}</dd>
@@ -540,9 +476,9 @@ export default function Home() {
         <div className="relative mx-auto max-w-6xl px-5 py-20 lg:py-24">
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,21rem)] lg:gap-16">
             <div className="flex flex-col">
-              <p className="eyebrow text-hivis">From the street</p>
+              <p className="eyebrow text-hivis">{t.reviews.eyebrow}</p>
               <h2 className="display mt-3 text-[clamp(2.25rem,4.4vw,3.25rem)]">
-                What people say
+                {t.reviews.title}
               </h2>
 
               <div className="mt-7 flex items-center gap-5">
@@ -550,7 +486,7 @@ export default function Home() {
                 <span className="h-10 w-px bg-white/15" aria-hidden="true" />
                 <div>
                   <Stars className="text-base" />
-                  <p className="mt-1.5 text-sm text-steel">14 Google reviews</p>
+                  <p className="mt-1.5 text-sm text-steel">{t.reviews.count}</p>
                 </div>
                 <a
                   href={MAPS_URL}
@@ -558,21 +494,22 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="ml-auto hidden font-mono text-xs uppercase tracking-[0.14em] text-steel underline decoration-steel/40 underline-offset-4 transition-colors hover:text-paper sm:inline-block"
                 >
-                  Read them on Google
+                  {t.reviews.readOnGoogle}
                 </a>
               </div>
 
               <ul className="mt-10 flex flex-1 flex-col justify-between gap-7">
-                {reviews.map((review) => (
-                  <li key={review.quote} className="border-t border-white/20 pt-5">
+                {t.reviews.items.map((quote) => (
+                  <li key={quote} className="border-t border-white/20 pt-5">
                     <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
                       <Stars className="text-[13px]" />
                       <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-steel">
-                        {review.meta}
+                        {t.reviews.source}
                       </span>
                     </div>
-                    <blockquote className="mt-3 text-[1.375rem] font-medium leading-[1.35] text-paper">
-                      &ldquo;{review.quote}&rdquo;
+                    {/* Reviews stay in the reviewer's own words, so mark them as English. */}
+                    <blockquote lang="en" className="mt-3 text-[1.375rem] font-medium leading-[1.35] text-paper">
+                      &ldquo;{quote}&rdquo;
                     </blockquote>
                   </li>
                 ))}
@@ -584,7 +521,7 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="mt-8 inline-block font-mono text-xs uppercase tracking-[0.14em] text-steel underline decoration-steel/40 underline-offset-4 transition-colors hover:text-paper sm:hidden"
               >
-                Read them on Google
+                {t.reviews.readOnGoogle}
               </a>
             </div>
 
@@ -594,8 +531,8 @@ export default function Home() {
                 className="absolute -bottom-3 -left-3 hidden h-20 w-20 border-b-2 border-l-2 border-hivis lg:block"
               />
               <Image
-                src={photos.sanding.src}
-                alt={photos.sanding.alt}
+                src={photos.sanding}
+                alt={t.photos.sanding}
                 fill
                 sizes="(max-width: 1024px) 100vw, 21rem"
                 className="object-cover"
@@ -613,32 +550,27 @@ export default function Home() {
       <section id="quote" className="scroll-mt-20 bg-primer">
         <div className="mx-auto max-w-6xl px-5 py-20 lg:py-24">
           <div className="max-w-2xl">
-            <p className="eyebrow text-coveralls/50">Get a quote</p>
+            <p className="eyebrow text-coveralls/50">{t.quote.eyebrow}</p>
             <h2 className="display mt-3 text-[clamp(2.25rem,5vw,3.5rem)] text-coveralls">
-              Tell us what happened
+              {t.quote.title}
             </h2>
-            <p className="mt-4 text-ink/70">
-              Send the details through and we&rsquo;ll call you back with a time to bring the
-              car in — or skip the form and ring the workshop.
-            </p>
+            <p className="mt-4 text-ink/70">{t.quote.body}</p>
           </div>
 
           <div className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-10">
-            <QuoteForm />
+            <QuoteForm t={t.form} />
 
             <aside className="flex flex-col gap-px overflow-hidden border border-steel/30 bg-steel/30">
               <div className="grain relative bg-coveralls px-6 py-7">
-                <p className="eyebrow relative text-hivis">The workshop</p>
-                <p className="display relative mt-2 text-2xl text-paper">
-                  Drive in, no appointment
-                </p>
+                <p className="eyebrow relative text-hivis">{t.quote.workshopEyebrow}</p>
+                <p className="display relative mt-2 text-2xl text-paper">{t.quote.workshopTitle}</p>
                 <p className="relative mt-2 text-sm leading-relaxed text-paper/70">
-                  Quotes are done on the spot during workshop hours.
+                  {t.quote.workshopBody}
                 </p>
               </div>
 
               <div className="bg-white p-6">
-                <h3 className="eyebrow text-ink/50">Visit</h3>
+                <h3 className="eyebrow text-ink/50">{t.quote.visit}</h3>
                 <p className="mt-2.5 text-lg font-semibold leading-snug text-coveralls">
                   {ADDRESS_LINE1}
                   <br />
@@ -650,7 +582,7 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="mt-3 inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.14em] text-coveralls underline decoration-hivis decoration-2 underline-offset-4"
                 >
-                  Directions
+                  {t.quote.directions}
                   <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5" aria-hidden="true">
                     <path d="M5 15 15 5M7 5h8v8" />
                   </svg>
@@ -658,7 +590,7 @@ export default function Home() {
               </div>
 
               <div className="bg-white p-6">
-                <h3 className="eyebrow text-ink/50">Call</h3>
+                <h3 className="eyebrow text-ink/50">{t.quote.call}</h3>
                 <a
                   href={PHONE_TEL}
                   className="display mt-2 block text-4xl text-coveralls transition-colors hover:text-hivis"
@@ -668,15 +600,15 @@ export default function Home() {
               </div>
 
               <div className="bg-white p-6">
-                <h3 className="eyebrow text-ink/50">Hours</h3>
+                <h3 className="eyebrow text-ink/50">{t.quote.hours}</h3>
                 <dl className="mt-3">
                   <div className="flex items-baseline justify-between gap-6 border-b border-steel/25 pb-2.5">
-                    <dt className="font-medium">Mon &ndash; Fri</dt>
-                    <dd className="font-mono text-sm">8:00 am &ndash; 5:00 pm</dd>
+                    <dt className="font-medium">{t.quote.weekdays}</dt>
+                    <dd className="font-mono text-sm">{t.quote.weekdayHours}</dd>
                   </div>
                   <div className="flex items-baseline justify-between gap-6 pt-2.5">
-                    <dt className="font-medium">Sat &ndash; Sun</dt>
-                    <dd className="font-mono text-sm text-ink/50">Closed</dd>
+                    <dt className="font-medium">{t.quote.weekend}</dt>
+                    <dd className="font-mono text-sm text-ink/50">{t.quote.closed}</dd>
                   </div>
                 </dl>
               </div>
@@ -692,8 +624,8 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-5 py-14">
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr]">
             <div>
-              <p className="display text-2xl">Combined Smash Repairs</p>
-              <p className="mt-1 text-sm text-steel">联合车厂 · Smash &amp; Mechanic Repair Service</p>
+              <p className="display text-2xl">{t.footer.brand}</p>
+              <p className="mt-1 text-sm text-steel">{t.footer.brandSub}</p>
               <p className="mt-5 text-sm leading-relaxed text-paper/70">
                 {ADDRESS_LINE1}
                 <br />
@@ -705,16 +637,16 @@ export default function Home() {
             </div>
 
             <div>
-              <h3 className="eyebrow text-steel">Services</h3>
+              <h3 className="eyebrow text-steel">{t.footer.services}</h3>
               <ul className="mt-4 space-y-2 text-sm text-paper/70">
-                {services.map((service) => (
+                {t.services.items.map((service) => (
                   <li key={service.title}>{service.title}</li>
                 ))}
               </ul>
             </div>
 
             <div>
-              <h3 className="eyebrow text-steel">Areas we cover</h3>
+              <h3 className="eyebrow text-steel">{t.footer.areas}</h3>
               <ul className="mt-4 flex flex-wrap gap-x-3 gap-y-2 text-sm text-paper/70">
                 {serviceAreas.map((area) => (
                   <li key={area} className="after:ml-3 after:text-steel/40 after:content-['·'] last:after:content-['']">
@@ -727,10 +659,10 @@ export default function Home() {
 
           <div className="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
             <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-steel">
-              Smash repairs · Spray painting · Mechanical
+              {t.footer.tagline}
             </p>
             <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-steel/70">
-              © {new Date().getFullYear()} Combined Smash Repairs
+              © {new Date().getFullYear()} {t.footer.copyright}
             </p>
           </div>
         </div>
@@ -744,13 +676,13 @@ export default function Home() {
             className="flex flex-1 items-center justify-center gap-2 rounded-sm bg-hivis py-3 font-mono text-sm font-bold uppercase tracking-[0.1em] text-coveralls-deep"
           >
             <PhoneIcon />
-            Call the workshop
+            {t.mobile.call}
           </a>
           <a
             href="#quote"
             className="flex items-center justify-center rounded-sm border border-steel/50 px-4 py-3 font-mono text-sm font-bold uppercase tracking-[0.1em] text-paper"
           >
-            Quote
+            {t.mobile.quote}
           </a>
         </div>
       </div>

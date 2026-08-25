@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Barlow, Big_Shoulders, Geist_Mono } from "next/font/google";
+import { getDictionary, htmlLang } from "@/lib/i18n";
+import { getLang } from "@/lib/lang";
 import "./globals.css";
 
 const bigShoulders = Big_Shoulders({
@@ -18,23 +20,25 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Combined Smash Repairs — Five Dock",
-  description:
-    "Smash repairs, spray painting and mechanical repairs on Parramatta Road, Five Dock. Insurance claims handled start to finish. Call (02) 9799 9433.",
-  openGraph: {
-    title: "Combined Smash Repairs — Five Dock",
-    description:
-      "Panel beating, colour-matched spray painting and mechanical repairs under one roof. 3A/61-73 Parramatta Rd, Five Dock NSW.",
-    type: "website",
-    locale: "en_AU",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = getDictionary(await getLang()).meta;
+  return {
+    title: t.title,
+    description: t.description,
+    openGraph: {
+      title: t.title,
+      description: t.ogDescription,
+      type: "website",
+      locale: t.ogLocale,
+    },
+  };
+}
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const lang = await getLang();
   return (
     <html
-      lang="en-AU"
+      lang={htmlLang[lang]}
       className={`${bigShoulders.variable} ${barlow.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>

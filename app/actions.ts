@@ -1,6 +1,9 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { sendQuoteRequestEmail } from "@/lib/mailer";
+import { getDictionary, isLang, LANG_COOKIE } from "@/lib/i18n";
+import { getLang } from "@/lib/lang";
 
 export type QuoteFormState = {
   status: "idle" | "success" | "error";
@@ -12,6 +15,22 @@ export type QuoteFormState = {
   >;
 };
 
+/**
+ * Remember the visitor's language choice. Setting a cookie inside a Server
+ * Action makes Next.js re-render the current route in the same response,
+ * so the page flips language without any client-side state.
+ */
+export async function setLanguage(lang: string): Promise<void> {
+  if (!isLang(lang)) {
+    return;
+  }
+  (await cookies()).set(LANG_COOKIE, lang, {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: "lax",
+  });
+}
+
 export async function submitQuoteRequest(
   _prev: QuoteFormState,
   formData: FormData,
@@ -20,6 +39,9 @@ export async function submitQuoteRequest(
   if (formData.get("company")) {
     return { status: "success" };
   }
+
+  // Validation messages come back in whichever language the form was shown in.
+  const t = getDictionary(await getLang()).errors;
 
   const field = (key: string) => String(formData.get(key) ?? "").trim();
 
@@ -32,20 +54,20 @@ export async function submitQuoteRequest(
 
   const errors: QuoteFormState["errors"] = {};
   if (!name) {
-    errors.name = "Enter your name.";
+    errors.name = t.name;
   }
   if (!/^[0-9\s()+-]{8,20}$/.test(phone)) {
-    errors.phone = "Enter a phone number we can call you on.";
+    errors.phone = t.phone;
   }
   if (!message) {
-    errors.message = "Tell us what happened, or what the car needs.";
+    errors.message = t.message;
   }
 
   if (Object.keys(errors).length > 0) {
     return {
       status: "error",
       errors,
-      formError: "A couple of fields need attention before we can send this.",
+      formError: t.form,
       values: { name, phone, email, vehicle, insurer, message },
     };
   }
@@ -66,8 +88,7 @@ export async function submitQuoteRequest(
     });
     return {
       status: "error",
-      formError:
-        "We couldn’t send your request just now — please try again, or call us on (02) 9799 9433.",
+      formError: t.send,
       values: { name, phone, email, vehicle, insurer, message },
     };
   }

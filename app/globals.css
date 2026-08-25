@@ -177,3 +177,41 @@ html {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ---------------------------------------------------------------- *
+ * Chinese. The Latin webfonts have no CJK glyphs, so the browser
+ * falls through per-character to the next family in the stack — name
+ * good system CJK faces explicitly rather than trusting `sans-serif`.
+ * Han glyphs fill the full em box, so the tight display leading that
+ * suits Big Shoulders would make two-line Chinese headings collide.
+ * ---------------------------------------------------------------- */
+:lang(zh) body {
+  font-family:
+    var(--font-barlow),
+    "Barlow",
+    "PingFang SC",
+    "Hiragino Sans GB",
+    "Microsoft YaHei",
+    "Noto Sans CJK SC",
+    "Noto Sans SC",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+}
+
+:lang(zh) .display {
+  font-family:
+    var(--font-big-shoulders),
+    "PingFang SC",
+    "Hiragino Sans GB",
+    "Microsoft YaHei",
+    "Noto Sans CJK SC",
+    "Noto Sans SC",
+    sans-serif;
+  letter-spacing: 0.01em;
+  line-height: 1.12;
+}
+
+:lang(zh) .eyebrow {
+  letter-spacing: 0.12em;
+}
