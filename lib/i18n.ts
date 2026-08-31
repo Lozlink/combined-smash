@@ -58,7 +58,6 @@ const en = {
     damage: "Accident-damaged car stripped down in the repair bay",
     prep: "The spray booth, with a car masked up inside ready for colour",
     sanding: "A bare shell sanded back to primer in the panel bay",
-    detail: "Finished prestige and classic cars on the workshop floor",
     workshop: "The workshop floor",
     mechanical: "A Skyline GT-R in the mechanical bay",
   },
@@ -70,7 +69,7 @@ const en = {
     titleMark: ".",
     lede: "Panel beating, colour-matched spray painting and mechanical repairs under one roof in Five Dock. Insurance claims handled start to finish — over 25 years of them.",
     call: "Call",
-    quote: "Request a quote",
+    quote: "Get a quote",
     onGoogle: "on Google",
     years: "25+ years in the trade",
     work: "Insurance & private work",
@@ -101,10 +100,6 @@ const en = {
       {
         title: "Mechanical repairs & servicing",
         body: "Accident-related mechanical work and regular servicing — brakes, cooling, suspension — handled in the same workshop, same visit.",
-      },
-      {
-        title: "Full restoration",
-        body: "For the keeper in the garage: metalwork, paint and mechanicals brought back properly, not quickly.",
       },
     ],
     claim: {
@@ -270,7 +265,6 @@ const zh: Dictionary = {
     damage: "在维修车间拆解的事故车",
     prep: "喷漆房外观，车已在房内贴好遮蔽准备喷漆",
     sanding: "钣金区打磨至底漆的车身壳体",
-    detail: "车间地面上修复完成的豪华车与经典车",
     workshop: "车间全景",
     mechanical: "机修区内的 Skyline GT-R",
   },
@@ -308,10 +302,6 @@ const zh: Dictionary = {
       {
         title: "机械维修与保养",
         body: "事故相关的机械维修和常规保养——刹车、冷却、悬挂——同一家车厂、同一次完成。",
-      },
-      {
-        title: "整车翻新",
-        body: "对于您珍藏的爱车：金属件、油漆和机械部分都认真修复，不图快，只求好。",
       },
     ],
     claim: {

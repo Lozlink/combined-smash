@@ -22,7 +22,6 @@ const photos = {
   damage: "/photos/damaged-repair.jpg",
   prep: "/photos/paint-prep.jpg",
   sanding: "/photos/panel-sand.jpg",
-  detail: "/photos/panel-detail.jpg",
   workshop: "/photos/workshop-wide.jpg",
   mechanical: "/photos/mechanical.jpg",
 } as const;
@@ -32,11 +31,11 @@ const photos = {
 const paintStages = [
   { color: "#6d7982" },
   { color: "#a7b1b8" },
-  { color: "#2c4c6c" },
-  { color: "#14293c", gloss: true },
+  { color: "#3a6b94" },
+  { color: "#27506f", gloss: true },
 ];
 
-type IconName = "panel" | "spray" | "spanner" | "restore";
+type IconName = "panel" | "spray" | "spanner";
 
 const icons: Record<IconName, React.ReactElement> = {
   panel: (
@@ -59,11 +58,6 @@ const icons: Record<IconName, React.ReactElement> = {
       <path d="M15.6 3.4a5 5 0 0 0-6.4 6.2L3.6 15.2a2 2 0 0 0 0 2.8l2.4 2.4a2 2 0 0 0 2.8 0l5.6-5.6a5 5 0 0 0 6.2-6.4l-3 3-2.8-.8-.8-2.8Z" />
     </>
   ),
-  restore: (
-    <>
-      <path d="M12 3.2 14.4 8l5.6.8-4 4 .9 5.6-4.9-2.6-4.9 2.6.9-5.6-4-4L9.6 8Z" />
-    </>
-  ),
 };
 
 /* Icon + photo for each service, in the same order as the dictionary's
@@ -72,7 +66,6 @@ const serviceArt: { icon: IconName; photo: keyof typeof photos }[] = [
   { icon: "panel", photo: "damage" },
   { icon: "spray", photo: "prep" },
   { icon: "spanner", photo: "mechanical" },
-  { icon: "restore", photo: "detail" },
 ];
 
 const serviceAreas = [
@@ -345,17 +338,21 @@ export default async function Home() {
             <div className="rule-hivis mt-6" />
           </div>
 
-          <div className="mt-12 grid gap-px overflow-hidden border border-steel/30 bg-steel/30 sm:grid-cols-2">
+          {/* Three cards: 2 + full-width at tablet, 3-up at desktop. */}
+          <div className="mt-12 grid gap-px overflow-hidden border border-steel/30 bg-steel/30 sm:grid-cols-2 lg:grid-cols-3">
             {t.services.items.map((service, i) => {
               const art = serviceArt[i];
               return (
-                <article key={service.title} className="group bg-white">
+                <article
+                  key={service.title}
+                  className="group bg-white sm:last:odd:col-span-2 lg:last:odd:col-span-1"
+                >
                   <div className="relative aspect-[16/9] overflow-hidden bg-primer">
                     <Image
                       src={photos[art.photo]}
                       alt={t.photos[art.photo]}
                       fill
-                      sizes="(max-width: 640px) 100vw, 50vw"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                     />
                     <span className="absolute bottom-0 left-0 inline-flex h-12 w-12 items-center justify-center bg-coveralls text-hivis">

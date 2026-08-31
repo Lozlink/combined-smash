@@ -2,16 +2,16 @@
 
 @theme inline {
   /* Surface + brand */
-  --color-coveralls: #14293c;
-  --color-coveralls-deep: #0d1c29;
-  --color-carbon: #071320;
+  --color-coveralls: #27506f;
+  --color-coveralls-deep: #1d3f5a;
+  --color-carbon: #152e47;
   --color-primer: #e8ebed;
   --color-paper: #f7f8f7;
   --color-hivis: #ffad0a;
   --color-hivis-bright: #ffc340;
   --color-steel: #8fa1ae;
   --color-steel-light: #b6c3cc;
-  --color-ink: #0e1f2d;
+  --color-ink: #1b3a54;
 
   --font-sans: var(--font-barlow);
   --font-display: var(--font-big-shoulders);
@@ -111,7 +111,7 @@ html {
 .card:hover {
   transform: translateY(-3px);
   border-color: var(--color-coveralls);
-  box-shadow: 0 18px 34px -22px rgb(14 31 45 / 0.55);
+  box-shadow: 0 18px 34px -22px rgb(27 58 84 / 0.55);
 }
 
 .field {
@@ -133,7 +133,7 @@ html {
 }
 
 .field:hover {
-  border-color: rgb(20 41 60 / 0.55);
+  border-color: rgb(39 80 111 / 0.55);
 }
 
 .field:focus {
