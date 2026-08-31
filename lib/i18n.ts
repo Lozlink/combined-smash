@@ -56,11 +56,11 @@ const en = {
   photos: {
     hero: "Car masked up inside a lit spray booth",
     damage: "Accident-damaged car stripped down in the repair bay",
-    prep: "Panel masked and taped ready for colour",
-    sanding: "Rear quarter panel being sanded back",
-    detail: "Bumper masked up in the booth",
+    prep: "The spray booth, with a car masked up inside ready for colour",
+    sanding: "A bare shell sanded back to primer in the panel bay",
+    detail: "Finished prestige and classic cars on the workshop floor",
     workshop: "The workshop floor",
-    mechanical: "Mechanical work under the bonnet",
+    mechanical: "A Skyline GT-R in the mechanical bay",
   },
 
   hero: {
@@ -268,11 +268,11 @@ const zh: Dictionary = {
   photos: {
     hero: "喷漆房内贴好遮蔽的汽车",
     damage: "在维修车间拆解的事故车",
-    prep: "贴好遮蔽胶带、准备喷漆的车身板",
-    sanding: "正在打磨的后侧围板",
-    detail: "喷漆房内贴好遮蔽的保险杠",
+    prep: "喷漆房外观，车已在房内贴好遮蔽准备喷漆",
+    sanding: "钣金区打磨至底漆的车身壳体",
+    detail: "车间地面上修复完成的豪华车与经典车",
     workshop: "车间全景",
-    mechanical: "引擎盖下的机械维修",
+    mechanical: "机修区内的 Skyline GT-R",
   },
 
   hero: {
