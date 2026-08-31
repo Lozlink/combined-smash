@@ -19,8 +19,7 @@ const MAPS_URL =
  * ------------------------------------------------------------------ */
 const photos = {
   hero: "/photos/hero-booth.jpg",
-  damage: "/photos/damaged-repair.jpg",
-  prep: "/photos/paint-prep.jpg",
+  detail: "/photos/panel-detail.jpg",
   sanding: "/photos/panel-sand.jpg",
   workshop: "/photos/workshop-wide.jpg",
   mechanical: "/photos/mechanical.jpg",
@@ -35,7 +34,7 @@ const paintStages = [
   { color: "#27506f", gloss: true },
 ];
 
-type IconName = "panel" | "spray" | "spanner";
+type IconName = "panel" | "spanner";
 
 const icons: Record<IconName, React.ReactElement> = {
   panel: (
@@ -43,14 +42,6 @@ const icons: Record<IconName, React.ReactElement> = {
       <path d="M3 15.5 5 9.5a3 3 0 0 1 2.85-2h8.3A3 3 0 0 1 19 9.5l2 6" />
       <path d="M3 15.5h18v3.2a.8.8 0 0 1-.8.8h-2.4a.8.8 0 0 1-.8-.8v-1.2H7v1.2a.8.8 0 0 1-.8.8H3.8a.8.8 0 0 1-.8-.8Z" />
       <path d="m13.2 6.6 3 3.4-3 1 2.2 2.6" />
-    </>
-  ),
-  spray: (
-    <>
-      <path d="M11.2 9.4h3.4a1.8 1.8 0 0 1 1.8 1.8v8.2a1.6 1.6 0 0 1-1.6 1.6h-3.8a1.6 1.6 0 0 1-1.6-1.6v-8.2a1.8 1.8 0 0 1 1.8-1.8Z" />
-      <path d="M11.4 9.4V6.2a1.6 1.6 0 0 1 1.6-1.6h.8a1.6 1.6 0 0 1 1.6 1.6v3.2" />
-      <path d="M9.4 13.2H6.6a2 2 0 0 1-2-2v-1.4" />
-      <path d="M18.2 4.6 21 3M18.2 7.4H21M18.2 10.2l2.8 1.6" />
     </>
   ),
   spanner: (
@@ -63,8 +54,7 @@ const icons: Record<IconName, React.ReactElement> = {
 /* Icon + photo for each service, in the same order as the dictionary's
    `services.items`. Copy is language-dependent; art direction isn't. */
 const serviceArt: { icon: IconName; photo: keyof typeof photos }[] = [
-  { icon: "panel", photo: "damage" },
-  { icon: "spray", photo: "prep" },
+  { icon: "panel", photo: "detail" },
   { icon: "spanner", photo: "mechanical" },
 ];
 
@@ -338,21 +328,17 @@ export default async function Home() {
             <div className="rule-hivis mt-6" />
           </div>
 
-          {/* Three cards: 2 + full-width at tablet, 3-up at desktop. */}
-          <div className="mt-12 grid gap-px overflow-hidden border border-steel/30 bg-steel/30 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-px overflow-hidden border border-steel/30 bg-steel/30 sm:grid-cols-2">
             {t.services.items.map((service, i) => {
               const art = serviceArt[i];
               return (
-                <article
-                  key={service.title}
-                  className="group bg-white sm:last:odd:col-span-2 lg:last:odd:col-span-1"
-                >
+                <article key={service.title} className="group bg-white">
                   <div className="relative aspect-[16/9] overflow-hidden bg-primer">
                     <Image
                       src={photos[art.photo]}
                       alt={t.photos[art.photo]}
                       fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      sizes="(max-width: 640px) 100vw, 50vw"
                       className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                     />
                     <span className="absolute bottom-0 left-0 inline-flex h-12 w-12 items-center justify-center bg-coveralls text-hivis">

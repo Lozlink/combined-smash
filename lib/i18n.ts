@@ -55,8 +55,7 @@ const en = {
 
   photos: {
     hero: "Car masked up inside a lit spray booth",
-    damage: "Accident-damaged car stripped down in the repair bay",
-    prep: "The spray booth, with a car masked up inside ready for colour",
+    detail: "Finished prestige and classic cars on the workshop floor",
     sanding: "A bare shell sanded back to primer in the panel bay",
     workshop: "The workshop floor",
     mechanical: "A Skyline GT-R in the mechanical bay",
@@ -92,10 +91,6 @@ const en = {
       {
         title: "Smash repairs",
         body: "Panel beating and structural repair for everything from car-park scrapes to serious hits. Quoted up front, through your insurer or privately.",
-      },
-      {
-        title: "Spray painting & colour matching",
-        body: "Factory-matched colour, sprayed and blended so the repair disappears into the panel next to it.",
       },
       {
         title: "Mechanical repairs & servicing",
@@ -262,8 +257,7 @@ const zh: Dictionary = {
 
   photos: {
     hero: "喷漆房内贴好遮蔽的汽车",
-    damage: "在维修车间拆解的事故车",
-    prep: "喷漆房外观，车已在房内贴好遮蔽准备喷漆",
+    detail: "车间地面上修复完成的豪华车与经典车",
     sanding: "钣金区打磨至底漆的车身壳体",
     workshop: "车间全景",
     mechanical: "机修区内的 Skyline GT-R",
@@ -294,10 +288,6 @@ const zh: Dictionary = {
       {
         title: "事故车身修复",
         body: "钣金和结构修复，从停车场刮蹭到严重碰撞都能处理。提前报价，走保险或自费均可。",
-      },
-      {
-        title: "喷漆与调色",
-        body: "按原厂色号调色，喷涂并过渡处理，让修补处与旁边的车身板完全融为一体。",
       },
       {
         title: "机械维修与保养",
