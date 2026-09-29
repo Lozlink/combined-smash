@@ -231,13 +231,16 @@ const en = {
 
 export type Dictionary = typeof en;
 
+/* Written for Mandarin readers, not translated line by line: industry
+ * terms follow Chinese insurance usage (定损员 = assessor, 报案号 =
+ * claim number) and the English em dashes are dropped. */
 const zh: Dictionary = {
   meta: {
-    title: "联合车厂 Combined Smash Repairs — Five Dock",
+    title: "联合车厂 Combined Smash Repairs｜Five Dock 钣金喷漆 汽车维修",
     description:
-      "位于 Five Dock Parramatta Road 的钣金喷漆及机械维修车厂。保险理赔从头到尾代办。电话 (02) 9799 9433。",
+      "联合车厂位于悉尼 Five Dock Parramatta Road，专做钣金、喷漆和汽车机修，保险理赔全程代办。电话 (02) 9799 9433。",
     ogDescription:
-      "钣金、原厂色喷漆和机械维修，一站式完成。3A/61-73 Parramatta Rd, Five Dock NSW。",
+      "钣金、喷漆、机修一站式搞定，按原厂色号精准调色。地址：3A/61-73 Parramatta Rd, Five Dock NSW。",
     ogLocale: "zh_CN",
   },
 
@@ -256,103 +259,103 @@ const zh: Dictionary = {
   },
 
   photos: {
-    hero: "喷漆房内贴好遮蔽的汽车",
-    detail: "车间地面上修复完成的豪华车与经典车",
-    sanding: "钣金区打磨至底漆的车身壳体",
-    workshop: "车间全景",
-    mechanical: "机修区内的 Skyline GT-R",
+    hero: "喷漆房内贴好遮蔽纸、准备喷漆的汽车",
+    detail: "车间里修好待取的豪车和老爷车",
+    sanding: "钣金区里打磨到底漆的车身",
+    workshop: "车间内景",
+    mechanical: "机修工位上的日产 Skyline GT-R",
   },
 
   hero: {
     eyebrow: "钣金 · 喷漆 · 机修 — Parramatta Rd",
-    titleLine1: "撞坏的车",
-    titleLine2: "我们修好",
+    titleLine1: "车？坏了?",
+    titleLine2: "我们来修",
     titleMark: "。",
-    lede: "钣金、原厂色喷漆和机械维修，在 Five Dock 一家车厂全部搞定。保险理赔从头到尾由我们处理——已经做了 25 年多。",
+    lede: "钣金、喷漆、机修，在 Five Dock 一站式搞定，颜色按原厂色号精准调配。保险理赔从报价到交车全程代办，这行我们已经做了 25\u00A0年以上。",
     call: "致电",
     quote: "免费报价",
     onGoogle: "Google 评分",
-    years: "25 年以上行业经验",
-    work: "保险理赔 & 自费维修",
-    photoEyebrow: "喷漆房内",
-    photoCaption: "颜色完全一致，不是差不多",
+    years: "从业 25 年以上",
+    work: "保险理赔、自费维修均可",
+    photoEyebrow: "喷漆房",
+    photoCaption: "精准调色，差不多可不行",
     paintStages: ["打磨", "底漆", "色漆", "清漆"],
   },
 
-  assurances: ["接受所有保险公司", "免费书面报价", "原厂色调色喷漆", "大部分车一周内完工"],
+  assurances: ["各大保险公司均可", "免费书面报价", "按原厂色号调色", "多数车一周内交车"],
 
   services: {
     eyebrow: "我们的服务",
-    title: "一家车厂，整车修好",
+    title: "修车不用来回跑",
     items: [
       {
-        title: "事故车身修复",
-        body: "钣金和结构修复，从停车场刮蹭到严重碰撞都能处理。提前报价，走保险或自费均可。",
+        title: "事故车维修",
+        body: "钣金整形和车身结构修复，停车场的小剐蹭到严重碰撞都能修。先报价后动工，走保险或自费都可以。",
       },
       {
         title: "机械维修与保养",
-        body: "事故相关的机械维修和常规保养——刹车、冷却、悬挂——同一家车厂、同一次完成。",
+        body: "事故造成的机械问题和日常保养，刹车、冷却系统、悬挂都能做。车不用换地方，一次修好。",
       },
     ],
     claim: {
       eyebrow: "保险理赔",
-      title: "不知道理赔从哪里开始？",
-      body: "把车开过来。我们拍照记录损伤、写好报价，并负责跟保险公司和评估员沟通——您只需和我们联系。",
-      quote: "获取报价",
-      talk: "联系我们",
+      title: "不懂理赔流程？",
+      body: "直接把车开过来。拍照取证、出报价、跟保险公司和定损员沟通，都由我们来办，您只需要跟我们联系。",
+      quote: "免费报价",
+      talk: "电话咨询",
     },
   },
 
   process: {
-    eyebrow: "从头到尾",
+    eyebrow: "从报价到交车",
     title: "维修流程",
-    aside: "无论走保险还是自费，都是同样的五个步骤。动工之前，您就会知道价格。",
+    aside: "走保险还是自费，流程都一样，一共五步。先报价后动工，价格提前心里有数。",
     steps: [
-      { title: "报价", body: "开车过来看一下，当场出书面报价——通常等一会儿就好。" },
-      { title: "审批", body: "走保险？我们提交报价，并负责与评估员沟通。" },
-      { title: "钣金喷漆", body: "修复或更换车身板，然后调色喷涂。" },
-      { title: "安全检查", body: "碰撞波及的部分——转向、灯光、冷却——全部检查并修好。" },
-      { title: "取车", body: "洗干净交车。大部分车一周内就能上路。" },
+      { title: "报价", body: "把车开过来看看，现场出书面报价，一般稍等一会儿就好。" },
+      { title: "定损审批", body: "走保险的话，报价由我们提交，定损员也由我们对接。" },
+      { title: "钣金喷漆", body: "修复或更换受损钣件，再按原厂色号调色喷涂。" },
+      { title: "安全检查", body: "碰撞波及的部位，比如转向、灯光、冷却系统，都会检查并修好。" },
+      { title: "取车", body: "洗好车再交给您。多数车一周内就能开走。" },
     ],
   },
 
   faq: {
-    eyebrow: "来之前了解一下",
+    eyebrow: "来店前须知",
     title: "常见问题",
-    aside: "还有其他问题？直接打电话到车厂——比打字快。",
+    aside: "还有其他问题，直接打电话到车厂问，比打字快。",
     items: [
       {
-        q: "我可以自己选修车厂吗？",
-        a: "在新州，大多数保单允许您指定自己的修车厂，而不必用保险公司指定的。查看您的保单条款（PDS），或者把保单带过来，我们帮您看。",
+        q: "我能自己选修车厂吗？",
+        a: "在新州，大多数保单允许您自己指定修车厂，不必去保险公司指定的那家。可以查看保单的产品披露声明（PDS），或者把保单带来，我们帮您看。",
       },
       {
-        q: "需要三份报价吗？",
-        a: "少数保险公司仍要求多份报价，大多数不需要。无论如何，我们的报价免费且有书面文件。",
+        q: "需要拿三份报价吗？",
+        a: "少数保险公司还要求多家报价，大多数不用。不管哪种情况，我们的报价都免费，并提供书面报价单。",
       },
       {
         q: "要修多久？",
-        a: "大部分车一周内就能上路。结构性维修取决于配件到货的速度。",
+        a: "多数车一周内就能修好上路。结构性维修要看配件多久到货。",
       },
       {
-        q: "颜色能对得上吗？",
-        a: "按车辆的原厂色号调色，并向两侧车身板过渡喷涂，修补处不会出现色差。",
+        q: "补漆会有色差吗？",
+        a: "我们按车辆的原厂色号调色，并对相邻钣件做过渡喷涂，修补的地方和原车漆看不出差别。",
       },
       {
-        q: "机械部分也能修吗？",
-        a: "可以——钣金、喷漆和机修都在同一家车厂，车不会中途被送到别的地方。",
+        q: "机修也能做吗？",
+        a: "能。钣金、喷漆、机修都在同一个车厂，车不会修到一半再被送去别处。",
       },
       {
-        q: "需要带什么？",
-        a: "车、驾照，如果已经报案，还有保险公司名称和理赔编号。",
+        q: "来的时候要带什么？",
+        a: "车和驾照。如果已经向保险公司报案，再带上保险公司名称和报案号。",
       },
     ],
   },
 
   reviews: {
-    eyebrow: "街坊口碑",
+    eyebrow: "真实口碑",
     title: "客户怎么说",
     count: "14 条 Google 评价",
-    readOnGoogle: "在 Google 上查看",
+    readOnGoogle: "在 Google 查看全部评价",
     source: "Google 评价",
     items: [
       "Super friendly staff.",
@@ -362,12 +365,12 @@ const zh: Dictionary = {
   },
 
   quote: {
-    eyebrow: "获取报价",
-    title: "告诉我们发生了什么",
-    body: "把详细情况发过来，我们会回电安排送车时间——或者跳过表单，直接打电话到车厂。",
-    workshopEyebrow: "车厂",
-    workshopTitle: "直接开过来，无需预约",
-    workshopBody: "营业时间内当场出报价。",
+    eyebrow: "免费报价",
+    title: "说说您的车况",
+    body: "填好信息发给我们，我们会回电约送车时间。不想填表的话，也可以直接打电话到车厂。",
+    workshopEyebrow: "车厂信息",
+    workshopTitle: "无需预约，直接开过来",
+    workshopBody: "营业时间内到店，现场报价。",
     visit: "地址",
     directions: "导航",
     call: "电话",
@@ -379,33 +382,33 @@ const zh: Dictionary = {
   },
 
   form: {
-    header: "维修申请",
-    noObligation: "无需承诺",
+    header: "报价申请",
+    noObligation: "报价免费，修不修由您",
     received: "已收到",
     name: "姓名",
     phone: "电话",
-    email: "电子邮箱",
+    email: "邮箱",
     optional: "选填",
-    vehicle: "车辆",
-    vehiclePlaceholder: "例如：Toyota Corolla 2019",
+    vehicle: "车型",
+    vehiclePlaceholder: "例如：2019 款 Toyota Corolla",
     insurer: "保险公司",
     insurerHint: "自费维修请留空",
-    message: "发生了什么？",
-    messagePlaceholder: "损伤在哪里、怎么发生的，或者车需要做什么维修。",
-    footer: "我们会回电安排送车时间。",
-    send: "发送申请",
-    sending: "发送中…",
-    successTitle: "申请已发送",
-    successBefore: "谢谢——我们已收到详细信息，会在营业时间内回电。如果车无法行驶，请立即致电 ",
+    message: "车况描述",
+    messagePlaceholder: "例如：哪里受损、怎么撞的，或者需要做哪些维修。",
+    footer: "我们会回电跟您约送车时间。",
+    send: "提交申请",
+    sending: "提交中…",
+    successTitle: "提交成功",
+    successBefore: "谢谢！信息已收到，我们会在营业时间内回电。如果车已经开不了，请直接致电 ",
     successAfter: "。",
   },
 
   errors: {
-    name: "请输入您的姓名。",
-    phone: "请输入一个我们能联系到您的电话号码。",
-    message: "请告诉我们发生了什么，或者车需要什么维修。",
-    form: "有几项需要补充后才能发送。",
-    send: "暂时无法发送您的申请——请重试，或致电 (02) 9799 9433。",
+    name: "请填写姓名。",
+    phone: "请填写能联系到您的电话号码。",
+    message: "请简单描述车况或需要的维修。",
+    form: "还有几项没填好，请检查后再提交。",
+    send: "提交失败，请稍后重试，或直接致电 (02) 9799 9433。",
   },
 
   footer: {
@@ -418,8 +421,8 @@ const zh: Dictionary = {
   },
 
   mobile: {
-    call: "致电车厂",
-    quote: "报价",
+    call: "拨打电话",
+    quote: "免费报价",
   },
 };
 
